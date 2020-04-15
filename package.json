@@ -1,0 +1,42 @@
+{
+    "name": "@genry/root",
+    "description": "Genry",
+    "keywords": [
+        "scaffolder",
+        "generator"
+    ],
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KrickRay/genry.git"
+    },
+    "private": true,
+    "license": "MIT",
+    "scripts": {
+        "release": "lerna version && lerna publish from-git --yes && yarn workspace genry-vscode release"
+    },
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "genry-vscode/glob",
+            "genry-vscode/glob/**",
+            "genry-vscode/node-ipc",
+            "genry-vscode/node-ipc/**",
+            "genry-vscode/uuid",
+            "genry-vscode/uuid/**"
+        ]
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^8.3.5",
+        "@commitlint/config-conventional": "^8.3.4",
+        "cross-env": "^7.0.2",
+        "husky": "^4.2.5",
+        "lerna": "^3.20.2",
+        "shx": "^0.3.2"
+    }
+}

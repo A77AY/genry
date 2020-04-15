@@ -1,0 +1,19 @@
+{
+    "name": "@genry/examples",
+    "description": "Genry examples",
+    "version": "0.14.3",
+    "private": true,
+    "license": "MIT",
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "scripts": {
+        "start": "genry"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.150",
+        "genry": "^0.14.3",
+        "lodash": "^4.17.15"
+    }
+}

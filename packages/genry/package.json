@@ -1,0 +1,53 @@
+{
+    "name": "genry",
+    "description": "Genry CLI",
+    "keywords": [
+        "scaffolder",
+        "generator"
+    ],
+    "version": "0.14.3",
+    "license": "MIT",
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "bin": {
+        "genry": "./out/bin.js"
+    },
+    "main": "./out/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KrickRay/genry.git",
+        "directory": "packages/cli"
+    },
+    "scripts": {
+        "start": "ts-node src",
+        "prepublishOnly": "yarn build",
+        "clear": "shx rm -rf out",
+        "build": "yarn clear && tsc -p ./",
+        "watch": "yarn clear && tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/cosmiconfig": "^6.0.0",
+        "@types/glob": "^7.1.1",
+        "@types/node": "^12.12.35",
+        "@types/node-ipc": "^9.1.2",
+        "@types/ora": "^3.2.0",
+        "@types/pkg-up": "^3.1.0",
+        "@types/prettier": "^2.0.0",
+        "@types/prompts": "^2.0.5",
+        "@types/yargs": "^15.0.4",
+        "typescript": "^3.8.3"
+    },
+    "dependencies": {
+        "cosmiconfig": "^6.0.0",
+        "glob": "^7.1.6",
+        "node-ipc": "^9.1.1",
+        "ora": "^4.0.3",
+        "pkg-up": "^3.1.0",
+        "prettier": "^2.0.4",
+        "prompts": "^2.3.2",
+        "ts-node": "^8.8.2",
+        "yargs": "^15.3.1"
+    }
+}

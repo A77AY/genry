@@ -1,0 +1,17 @@
+{
+  "folders": [
+	{
+		"path": "packages\\genry"
+	},
+	{
+		"path": "packages\\examples"
+	},
+	{
+		"path": "packages\\genry-vscode"
+	},
+	{
+		"path": "."
+	}
+],
+  "settings": {}
+}
