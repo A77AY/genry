@@ -1,0 +1,45 @@
+{
+    "name": "genry",
+    "description": "Genry Scaffolder CLI",
+    "keywords": [
+        "scaffolder",
+        "generator"
+    ],
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "bin": {
+        "genry": "./out/bin.js"
+    },
+    "main": "./out/template.js",
+    "scripts": {
+        "start": "ts-node src",
+        "prepublish": "yarn build",
+        "clear": "shx rm -rf out",
+        "build": "yarn clear && tsc -p ./",
+        "watch": "yarn clear && tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "^12.12.35",
+        "ts-node": "^8.8.2",
+        "typescript": "^3.8.3"
+    },
+    "dependencies": {
+        "@types/cosmiconfig": "^6.0.0",
+        "@types/glob": "^7.1.1",
+        "@types/node-ipc": "^9.1.2",
+        "@types/prettier": "^2.0.0",
+        "@types/prompts": "^2.0.5",
+        "@types/yargs": "^15.0.4",
+        "console-clear": "^1.1.1",
+        "cosmiconfig": "^6.0.0",
+        "glob": "^7.1.6",
+        "node-ipc": "^9.1.1",
+        "prettier": "^2.0.4",
+        "prompts": "^2.3.2",
+        "yargs": "^15.3.1"
+    }
+}

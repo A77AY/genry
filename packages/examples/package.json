@@ -1,0 +1,16 @@
+{
+    "name": "@genry/examples",
+    "description": "Genry Scaffolder Examples",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "scripts": {
+        "start": "genry"
+    },
+    "devDependencies": {
+        "genry": "^0.1.0"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "@genry/root",
+    "description": "Genry Scaffolder",
+    "keywords": [
+        "scaffolder",
+        "generator"
+    ],
+    "author": {
+        "name": "Rinat Arsaev",
+        "email": "krickray@gmail.com"
+    },
+    "version": "0.1.0",
+    "private": true,
+    "license": "MIT",
+    "scripts": {},
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "shx": "^0.3.2"
+    }
+}

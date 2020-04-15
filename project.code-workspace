@@ -1,0 +1,17 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "packages\\cli"
+	},
+	{
+		"path": "packages\\examples"
+	},
+	{
+		"path": "packages\\vsc-extension"
+	}
+],
+  "settings": {}
+}
