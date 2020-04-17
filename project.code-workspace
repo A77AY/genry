@@ -1,13 +1,13 @@
 {
   "folders": [
 	{
-		"path": "packages\\cli"
+		"path": "packages\\genry"
 	},
 	{
 		"path": "packages\\examples"
 	},
 	{
-		"path": "packages\\vsc-extension"
+		"path": "packages\\genry-vscode"
 	},
 	{
 		"path": "."

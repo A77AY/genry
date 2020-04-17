@@ -6,7 +6,7 @@
         "scaffolder",
         "generator"
     ],
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": "MIT",
     "author": {
         "name": "Rinat Arsaev",
@@ -33,7 +33,7 @@
         "commands": [
             {
                 "command": "genry.create",
-                "title": "genry: Create by template"
+                "title": "Genry: Create by template"
             },
             {
                 "command": "genry.createByMenu",
@@ -50,7 +50,7 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn compile",
-        "publish:vsc": "vsce publish --yarn",
+        "publish:vsc": "vsce publish",
         "compile": "yarn clear && tsc -p ./",
         "lint": "eslint src --ext ts",
         "watch": "yarn clear && tsc -watch -p ./",

@@ -17,9 +17,17 @@
     "private": true,
     "license": "MIT",
     "scripts": {},
-    "workspaces": [
-        "packages/*"
-    ],
+    "workspaces": {
+        "packages": ["packages/*"],
+        "nohoist": [
+            "genry-vscode/glob",
+            "genry-vscode/glob/**",
+            "genry-vscode/node-ipc",
+            "genry-vscode/node-ipc/**",
+            "genry-vscode/uuid",
+            "genry-vscode/uuid/**"
+        ]
+    },
     "devDependencies": {
         "shx": "^0.3.2"
     }
