@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as ipc from "node-ipc";
 import { v4 as uuid } from "uuid";
 
-const TERMINAL_NAME = "genry scaffolder";
+const TERMINAL_NAME = "Genry Scaffolder";
 
 async function getTerminalByProccessId(processId: number) {
     const processes = await Promise.all(
