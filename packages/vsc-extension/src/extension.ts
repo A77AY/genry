@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand("genry.create", () => {
             const terminal = vscode.window.createTerminal(TERMINAL_NAME);
-            terminal.sendText("ts-node scaffolder");
+            terminal.sendText("npx genry");
             terminal.show();
         })
     );
@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
             async ({ fsPath }: { fsPath: string }) => {
                 const terminal = vscode.window.createTerminal(TERMINAL_NAME);
                 terminal.sendText(
-                    `ts-node scaffolder --path "${fsPath}" --ipcServer ${
+                    `npx genry --path "${fsPath}" --ipcServer ${
                         ipc.config.id
                     } --terminalId ${await terminal.processId}`
                 );

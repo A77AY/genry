@@ -1,16 +1,17 @@
 # Genry Scaffolder
 
-## Development
+Scaffolding Tool
 
-### Init
+For Generating Code
 
-```sh
-yarn install
-```
+By JS & TS Templates
 
-### Publish
+## User-friendly
 
-```sh
-yarn workspace genry publish
-yarn workspace @genry/vsc-extension publish:vsc
-```
+-   Work with context menu
+-   Beautiful prompts
+
+## Modern
+
+-   JavaScript & TypeScript templates
+-   Full support NodeJS & TypeScript features

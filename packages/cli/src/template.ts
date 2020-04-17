@@ -1,6 +1,7 @@
 import * as prompts from "prompts";
 import { PromptObject, Answers } from "prompts";
 import { promises as fs } from "fs";
+import * as path from "path";
 import * as prettier from "prettier";
 
 type Prompt<T extends string = string, A extends string = string> =
@@ -38,7 +39,7 @@ function treePromptToPromptsObjects<T extends string = string>(
     }, [] as PromptObject<T>[]);
 }
 
-function treePromptsToPromptsObject<T extends string = string>(
+function promptsToPromptsObject<T extends string = string>(
     prompts: Prompt<T, T>[]
 ): PromptObject<T>[] {
     return prompts.reduce((acc, p) => {
@@ -51,16 +52,30 @@ function treePromptsToPromptsObject<T extends string = string>(
     }, []);
 }
 
+interface FileTemplate {
+    path: string;
+    content: string;
+}
+
+interface Args {
+    path: string;
+    ipcServer: string;
+    terminalId: string;
+}
+
+interface TemplateParams {
+    path: string;
+}
+
 export class Template<T extends string = string, C extends any = any> {
     name: string;
     description?: string;
     questions: PromptObject<T>[];
     template: (
         answers: Answers<T>,
-        config: any
-    ) =>
-        | Promise<{ path: string; content: string }[]>
-        | { path: string; content: string }[];
+        config: C,
+        args: TemplateParams
+    ) => FileTemplate[] | Promise<FileTemplate[]>;
 
     constructor({
         name,
@@ -75,24 +90,26 @@ export class Template<T extends string = string, C extends any = any> {
     }) {
         this.name = name;
         this.description = description;
-        this.questions = treePromptsToPromptsObject(questions);
+        this.questions = promptsToPromptsObject(questions);
         this.template = template;
     }
 
-    async generate(config: C) {
+    async generate(config: C, args: Args) {
         const answers = await prompts(this.questions);
-        const template = await this.template(answers, config);
+        const params: TemplateParams = { path: args.path };
+        const template = await this.template(answers, config, params);
         await Promise.all(
             template.map(async (result) => {
-                const fileInfo = await prettier.getFileInfo(result.path);
-                await fs.writeFile(
-                    result.path,
-                    fileInfo.ignored
-                        ? result.content
-                        : prettier.format(result.content, {
-                              parser: fileInfo.inferredParser as any,
-                          })
+                const prettierFileInfo = await prettier.getFileInfo(
+                    result.path
                 );
+                const resultPath = path.join(args.path, result.path);
+                const resultContent = prettierFileInfo.ignored
+                    ? result.content
+                    : prettier.format(result.content, {
+                          parser: prettierFileInfo.inferredParser as prettier.Options["parser"],
+                      });
+                await fs.writeFile(resultPath, resultContent);
             })
         );
     }

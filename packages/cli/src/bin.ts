@@ -82,7 +82,7 @@ const config$ = cosmiconfig(MODULE_NAME).search();
             },
         ]);
 
-        await (response.template as Template).generate(config);
+        await (response.template as Template).generate(config, args);
     } else {
         console.log("Template files not found");
     }
