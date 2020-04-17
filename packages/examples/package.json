@@ -11,6 +11,6 @@
         "start": "genry"
     },
     "devDependencies": {
-        "genry": "^0.1.0"
+        "genry": "*"
     }
 }
