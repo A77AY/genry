@@ -13,51 +13,47 @@ import { Template } from "./template";
 import { Choice } from "prompts";
 import * as ora from "ora";
 import * as pkgUp from "pkg-up";
-
-clear();
-const spinner = ora().start("Loading templates");
-register();
+import { Ora } from "ora";
 
 const MODULE_NAME = "genry";
 const TEMPLATE_TYPE = "genry";
-const ARGS = yargs
-    .command("create", "create by template")
-    .option("path", {
-        alias: "p",
-        type: "string",
-        description: "Path",
-        default: "./",
-    })
-    .option("ipcServer", {
-        type: "string",
-    })
-    .option("terminalId", {
-        type: "string",
-    }).argv;
 
-function closeVsCodeTerminal(ipcServer: string) {
+function closeVsCodeTerminal({
+    serverId,
+    terminalId,
+}: {
+    serverId: string;
+    terminalId: string;
+}) {
     ipc.config.silent = true;
 
     return new Promise((res) => {
-        ipc.connectTo(ipcServer, () => {
-            const ipcServer = ipc.of[ARGS.ipcServer];
+        ipc.connectTo(serverId, () => {
+            const ipcServer = ipc.of[serverId];
 
             ipcServer.on("connect", async () => {
-                ipcServer.emit("end", ARGS.terminalId);
+                ipcServer.emit("end", terminalId);
             });
             ipcServer.on("end", () => {
-                ipc.disconnect(ARGS.ipcServer);
+                ipc.disconnect(serverId);
                 res();
             });
         });
     });
 }
 
-(async () => {
-    const config = (await cosmiconfig(MODULE_NAME).search())?.config;
-    const files = await promisify(glob)(`**/*.${TEMPLATE_TYPE}.*`, {
+async function searchTemplates({
+    spinner,
+    cwd,
+    templateType,
+}: {
+    spinner: Ora;
+    cwd: string;
+    templateType: string;
+}): Promise<Template[]> {
+    const files = await promisify(glob)(`**/*.${templateType}.*`, {
         dot: true,
-        root: await pkgUp(),
+        cwd,
     });
 
     if (!files.length) {
@@ -65,7 +61,15 @@ function closeVsCodeTerminal(ipcServer: string) {
         return;
     }
 
-    const templates: Template[] = await Promise.all(
+    spinner.text =
+        files.length === 1
+            ? "Prepare template"
+            : `Prepare ${files.length} templates`;
+
+    const startedCwd = process.cwd();
+    process.chdir(cwd);
+
+    const templates = await Promise.all(
         files.map((file) =>
             import(path.join(process.cwd(), file)).then(
                 (f) => f.default as Template
@@ -73,56 +77,91 @@ function closeVsCodeTerminal(ipcServer: string) {
         )
     );
 
-    const choices = templates.map((template) => {
-        return {
-            title: template.name,
-            description: template.description,
-            value: template,
-        };
+    process.chdir(startedCwd);
+
+    return templates;
+}
+
+async function suggest(input: string, choices: Choice[]): Promise<Choice[]> {
+    return choices
+        .filter(
+            (choice) =>
+                choice.title.search(input) !== -1 ||
+                (choice.description && choice.description.search(input) !== -1)
+        )
+        .sort(
+            (a, b) =>
+                (a.title + a.description).search(input) -
+                (b.title + b.description).search(input)
+        );
+}
+
+async function selectTemplate(templates: Template[]) {
+    const { template }: { template: Template } = await prompts([
+        {
+            type: "autocomplete",
+            name: "template",
+            message: "Select template",
+            choices: templates.map((template) => ({
+                title: template.name,
+                description: template.description,
+                value: template,
+            })),
+            suggest,
+        },
+    ]);
+
+    return template;
+}
+
+(async () => {
+    const spinner = ora();
+    clear();
+    spinner.start("Loading templates");
+
+    register();
+
+    const [packagePath, config] = await Promise.all([
+        pkgUp().then((p) => path.dirname(p)),
+        cosmiconfig(MODULE_NAME)
+            .search()
+            .then((c) => c?.config),
+    ]);
+
+    const args = yargs
+        .command("create", "create by template")
+        .option("path", {
+            alias: "p",
+            type: "string",
+            description: "Path",
+            default: process.cwd(),
+        })
+        .option("ipcServer", {
+            type: "string",
+        })
+        .option("terminalId", {
+            type: "string",
+        }).argv;
+
+    const templates = await searchTemplates({
+        spinner,
+        cwd: packagePath,
+        templateType: TEMPLATE_TYPE,
     });
 
-    spinner.succeed("Templates loaded!");
+    spinner.stop();
     clear();
 
-    const suggest = (input: string, choices: Choice[]) =>
-        Promise.resolve(
-            choices
-                .filter(
-                    (choice) =>
-                        choice.title.search(input) !== -1 ||
-                        (choice.description &&
-                            choice.description.search(input) !== -1)
-                )
-                .sort(
-                    (a, b) =>
-                        (a.title + a.description).search(input) -
-                        (b.title + b.description).search(input)
-                )
-        );
+    const template = await selectTemplate(templates);
 
-    let cancelled = false;
-    const { template }: { template: Template } = await prompts(
-        [
-            {
-                type: "autocomplete",
-                name: "template",
-                message: "Select template",
-                choices,
-                suggest,
-            },
-        ],
-        {
-            onCancel: () => {
-                cancelled = true;
-            },
-        }
-    );
-
-    if (!cancelled) {
-        await template.generate(config, ARGS);
+    if (template) {
+        await template.generate(config, args);
     }
 
-    if (ARGS.ipcServer) {
-        await closeVsCodeTerminal(ARGS.ipcServer);
+    if (args.ipcServer) {
+        await closeVsCodeTerminal({
+            serverId: args.ipcServer,
+            terminalId: args.terminalId,
+        });
     }
 })();

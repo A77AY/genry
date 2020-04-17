@@ -103,7 +103,7 @@ export class Template<T extends string = string, C extends any = any> {
                 const prettierFileInfo = await prettier.getFileInfo(
                     result.path
                 );
-                const resultPath = path.join(args.path, result.path);
+                const resultPath = path.join(params.path, result.path);
                 const resultContent = prettierFileInfo.ignored
                     ? result.content
                     : prettier.format(result.content, {
