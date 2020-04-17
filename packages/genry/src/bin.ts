@@ -59,7 +59,7 @@ function closeVsCodeTerminal(ipcServer: string) {
     });
 
     if (!files.length) {
-        console.log("Template files not found");
+        spinner.warn("Template files not found");
         return;
     }
 
