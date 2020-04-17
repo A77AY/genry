@@ -1,17 +1,17 @@
 # Genry Scaffolder
 
-Scaffolding Tool
+**Scaffolding Tool**<br>
+**For** Generating Code<br>
+**By** JS & TS Templates
 
-For Generating Code
+![Sample](sample.gif)
 
-By JS & TS Templates
+## User-Friendly
 
-## User-friendly
-
--   Work with context menu
+-   Calls from context menu
 -   Beautiful prompts
 
-## Modern
+## JavaScript Environment
 
 -   JavaScript & TypeScript templates
--   Full support NodeJS & TypeScript features
+-   Full support JavaScript, TypeScript & NodeJS features

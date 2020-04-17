@@ -1,8 +1,23 @@
 # Genry Scaffolder Monorepo
 
--   [CLI](https://www.npmjs.com/package/genry)
--   [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode)
--   Examples
+**Scaffolding Tool**<br>
+**For** Generating Code<br>
+**By** JS & TS Templates
+
+![Sample](sample.gif)
+
+## User-Friendly
+
+-   Beautiful prompts
+
+## JavaScript Environment
+
+-   JavaScript & TypeScript templates
+-   Full support JavaScript, TypeScript & NodeJS features
+
+*   [CLI](https://www.npmjs.com/package/genry)
+*   [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode)
+*   Examples
 
 ---
 
@@ -40,5 +55,5 @@ yarn workspace genry publish
 #### Publish
 
 ```sh
-yarn workspace @genry/vsc-extension publish:vsc
+yarn workspace genry-vscode publish:vsc
 ```

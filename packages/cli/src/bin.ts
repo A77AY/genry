@@ -11,20 +11,21 @@ import * as path from "path";
 import { register } from "ts-node";
 import { Template } from "./template";
 import { Choice } from "prompts";
+import * as ora from "ora";
 
+clear();
+const spinner = ora().start("Loading templates");
 register();
 
 const MODULE_NAME = "genry";
 const TEMPLATE_TYPE = "genry";
-
-clear();
-
-const args = yargs
+const ARGS = yargs
     .command("create", "create by template")
     .option("path", {
         alias: "p",
         type: "string",
         description: "Path",
+        default: "./",
     })
     .option("ipcServer", {
         type: "string",
@@ -33,46 +34,73 @@ const args = yargs
         type: "string",
     }).argv;
 
-const config$ = cosmiconfig(MODULE_NAME).search();
+function closeVsCodeTerminal(ipcServer: string) {
+    ipc.config.silent = true;
+
+    return new Promise((res) => {
+        ipc.connectTo(ipcServer, () => {
+            const ipcServer = ipc.of[ARGS.ipcServer];
+
+            ipcServer.on("connect", async () => {
+                ipcServer.emit("end", ARGS.terminalId);
+            });
+            ipcServer.on("end", () => {
+                ipc.disconnect(ARGS.ipcServer);
+                res();
+            });
+        });
+    });
+}
 
 (async () => {
-    const config = (await config$)?.config;
+    const config = (await cosmiconfig(MODULE_NAME).search())?.config;
     const files = await promisify(glob)(`**/*.${TEMPLATE_TYPE}.*`, {
         dot: true,
     });
 
-    if (files.length > 0) {
-        const templates: Template[] = await Promise.all(
-            files.map((file) =>
-                import(path.join(process.cwd(), file)).then(
-                    (f) => f.default as Template
-                )
+    if (!files.length) {
+        console.log("Template files not found");
+        return;
+    }
+
+    const templates: Template[] = await Promise.all(
+        files.map((file) =>
+            import(path.join(process.cwd(), file)).then(
+                (f) => f.default as Template
             )
+        )
+    );
+
+    const choices = templates.map((template) => {
+        return {
+            title: template.name,
+            description: template.description,
+            value: template,
+        };
+    });
+
+    spinner.succeed("Templates loaded!");
+    clear();
+
+    const suggest = (input: string, choices: Choice[]) =>
+        Promise.resolve(
+            choices
+                .filter(
+                    (choice) =>
+                        choice.title.search(input) !== -1 ||
+                        (choice.description &&
+                            choice.description.search(input) !== -1)
+                )
+                .sort(
+                    (a, b) =>
+                        (a.title + a.description).search(input) -
+                        (b.title + b.description).search(input)
+                )
         );
 
-        const choices = templates.map((t, idx) => {
-            return {
-                title: t.name,
-                description: t.description,
-                value: t,
-            };
-        });
-
-        const suggest = (input: string, choices: Choice[]) =>
-            Promise.resolve(
-                choices
-                    .filter(
-                        (choice) =>
-                            choice.title.search(input) !== -1 ||
-                            (choice.description &&
-                                choice.description.search(input) !== -1)
-                    )
-                    .sort(
-                        (a, b) => a.title.search(input) - b.title.search(input)
-                    )
-            );
-
-        const response = await prompts([
+    let cancelled = false;
+    const { template }: { template: Template } = await prompts(
+        [
             {
                 type: "autocomplete",
                 name: "template",
@@ -80,31 +108,19 @@ const config$ = cosmiconfig(MODULE_NAME).search();
                 choices,
                 suggest,
             },
-        ]);
+        ],
+        {
+            onCancel: () => {
+                cancelled = true;
+            },
+        }
+    );
 
-        await (response.template as Template).generate(config, args);
-    } else {
-        console.log("Template files not found");
+    if (!cancelled) {
+        await template.generate(config, ARGS);
     }
 
-    await vscExtension();
+    if (ARGS.ipcServer) {
+        await closeVsCodeTerminal(ARGS.ipcServer);
+    }
 })();
-
-function vscExtension() {
-    ipc.config.id = Math.random().toString();
-    ipc.config.silent = true;
-
-    return new Promise((res) => {
-        ipc.connectTo(args.ipcServer, () => {
-            const ipcServer = ipc.of[args.ipcServer];
-
-            ipcServer.on("connect", async () => {
-                ipcServer.emit("end", args.terminalId);
-            });
-            ipcServer.on("end", () => {
-                ipc.disconnect(args.ipcServer);
-                res();
-            });
-        });
-    });
-}

@@ -5,7 +5,7 @@
         "scaffolder",
         "generator"
     ],
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license": "MIT",
     "author": {
         "name": "Rinat Arsaev",
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "start": "ts-node src",
-        "prepublish": "yarn build",
+        "prepublishOnly": "yarn build",
         "clear": "shx rm -rf out",
         "build": "yarn clear && tsc -p ./",
         "watch": "yarn clear && tsc -watch -p ./"
@@ -36,6 +36,7 @@
         "@types/cosmiconfig": "^6.0.0",
         "@types/glob": "^7.1.1",
         "@types/node-ipc": "^9.1.2",
+        "@types/ora": "^3.2.0",
         "@types/prettier": "^2.0.0",
         "@types/prompts": "^2.0.5",
         "@types/yargs": "^15.0.4",
@@ -43,6 +44,7 @@
         "cosmiconfig": "^6.0.0",
         "glob": "^7.1.6",
         "node-ipc": "^9.1.1",
+        "ora": "^4.0.3",
         "prettier": "^2.0.4",
         "prompts": "^2.3.2",
         "yargs": "^15.3.1"
