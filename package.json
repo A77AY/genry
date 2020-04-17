@@ -9,6 +9,10 @@
         "name": "Rinat Arsaev",
         "email": "krickray@gmail.com"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KrickRay/genry.git"
+    },
     "version": "0.1.0",
     "private": true,
     "license": "MIT",

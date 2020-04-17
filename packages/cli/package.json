@@ -15,6 +15,11 @@
         "genry": "./out/bin.js"
     },
     "main": "./out/template.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KrickRay/genry.git",
+        "directory": "packages/cli"
+    },
     "scripts": {
         "start": "ts-node src",
         "prepublish": "yarn build",

@@ -1,5 +1,5 @@
 {
-    "name": "@genry/vsc-extension",
+    "name": "genry-vscode",
     "displayName": "Genry Scaffolder",
     "description": "Genry VS Code Scaffolder Extension",
     "keywords": [
@@ -12,8 +12,9 @@
         "name": "Rinat Arsaev",
         "email": "krickray@gmail.com"
     },
+    "publisher": "krickray",
     "engines": {
-        "vscode": "^1.42.0"
+        "vscode": "^1.44.0"
     },
     "categories": [
         "Other"
@@ -23,6 +24,11 @@
         "onCommand:genry.createByMenu"
     ],
     "main": "./out/extension.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KrickRay/genry.git",
+        "directory": "packages/vsc-extension"
+    },
     "contributes": {
         "commands": [
             {
@@ -44,7 +50,8 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn compile",
-        "compile": "tsc -p ./",
+        "publish:vsc": "vsce publish --yarn",
+        "compile": "yarn clear && tsc -p ./",
         "lint": "eslint src --ext ts",
         "watch": "yarn clear && tsc -watch -p ./",
         "clear": "shx rm -rf out",
