@@ -12,6 +12,7 @@ import { register } from "ts-node";
 import { Template } from "./template";
 import { Choice } from "prompts";
 import * as ora from "ora";
+import * as pkgUp from "pkg-up";
 
 clear();
 const spinner = ora().start("Loading templates");
@@ -56,6 +57,7 @@ function closeVsCodeTerminal(ipcServer: string) {
     const config = (await cosmiconfig(MODULE_NAME).search())?.config;
     const files = await promisify(glob)(`**/*.${TEMPLATE_TYPE}.*`, {
         dot: true,
+        root: await pkgUp(),
     });
 
     if (!files.length) {
