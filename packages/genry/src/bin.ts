@@ -138,7 +138,7 @@ async function selectTemplate(templates: Template[]) {
     const [packagePath, config] = await Promise.all([
         pkgUp({ cwd: args.path }).then((p) => path.dirname(p)),
         cosmiconfig(MODULE_NAME)
-            .search()
+            .search(args.path)
             .then((c) => c?.config),
     ]);
 
