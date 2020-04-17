@@ -68,12 +68,17 @@ async function searchTemplates({
     const startedCwd = process.cwd();
     process.chdir(cwd);
 
-    const templates = await Promise.all(
-        files.map((file) =>
-            import(path.join(process.cwd(), file)).then(
-                (f) => f.default as Template
+    const templates = (
+        await Promise.all(
+            files.map((file) =>
+                import(path.join(process.cwd(), file)).then(
+                    (f) => f.default as Template | Template[]
+                )
             )
         )
+    ).reduce<Template[]>(
+        (acc, t) => acc.concat(Array.isArray(t) ? t : [t]),
+        []
     );
 
     process.chdir(startedCwd);

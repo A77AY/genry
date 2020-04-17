@@ -11,6 +11,8 @@
         "start": "genry"
     },
     "devDependencies": {
-        "genry": "*"
+        "@types/lodash-es": "^4.17.3",
+        "genry": "*",
+        "lodash-es": "^4.17.15"
     }
 }

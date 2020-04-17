@@ -1,4 +1,5 @@
 import { Template } from "genry";
+import { snakeCase } from "lodash-es";
 
 export default new Template({
     name: "Create component",

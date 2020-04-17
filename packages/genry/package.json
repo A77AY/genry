@@ -5,7 +5,7 @@
         "scaffolder",
         "generator"
     ],
-    "version": "0.7.1",
+    "version": "0.8.0",
     "license": "MIT",
     "author": {
         "name": "Rinat Arsaev",
@@ -14,7 +14,7 @@
     "bin": {
         "genry": "./out/bin.js"
     },
-    "main": "./out/template.js",
+    "main": "./out/index.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/KrickRay/genry.git",
