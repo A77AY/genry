@@ -14,3 +14,15 @@
 
 -   JavaScript & TypeScript templates
 -   Full support JavaScript, TypeScript & NodeJS features
+
+## Usage
+
+-   NPX
+    ```sh
+    npx genry
+    ```
+-   NPM
+    ```sh
+    npm i genry -g
+    genry
+    ```
