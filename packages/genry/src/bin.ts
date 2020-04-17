@@ -57,8 +57,7 @@ async function searchTemplates({
     });
 
     if (!files.length) {
-        spinner.warn("Template files not found");
-        return;
+        return [];
     }
 
     spinner.text =
@@ -149,13 +148,17 @@ async function selectTemplate(templates: Template[]) {
         templateType: TEMPLATE_TYPE,
     });
 
-    spinner.stop();
-    clear();
+    if (templates.length) {
+        spinner.stop();
+        clear();
 
-    const template = await selectTemplate(templates);
+        const template = await selectTemplate(templates);
 
-    if (template) {
-        await template.generate(config, args);
+        if (template) {
+            await template.generate(config, args);
+        }
+    } else {
+        spinner.warn("Template files not found");
     }
 
     if (args.ipcServer) {
