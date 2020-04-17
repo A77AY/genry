@@ -120,13 +120,6 @@ async function selectTemplate(templates: Template[]) {
 
     register();
 
-    const [packagePath, config] = await Promise.all([
-        pkgUp().then((p) => path.dirname(p)),
-        cosmiconfig(MODULE_NAME)
-            .search()
-            .then((c) => c?.config),
-    ]);
-
     const args = yargs
         .command("create", "create by template")
         .option("path", {
@@ -141,6 +134,13 @@ async function selectTemplate(templates: Template[]) {
         .option("terminalId", {
             type: "string",
         }).argv;
+
+    const [packagePath, config] = await Promise.all([
+        pkgUp({ cwd: args.path }).then((p) => path.dirname(p)),
+        cosmiconfig(MODULE_NAME)
+            .search()
+            .then((c) => c?.config),
+    ]);
 
     const templates = await searchTemplates({
         spinner,
@@ -157,14 +157,15 @@ async function selectTemplate(templates: Template[]) {
         if (template) {
             await template.generate(config, args);
         }
-    } else {
-        spinner.warn("Template files not found");
-    }
 
-    if (args.ipcServer) {
-        await closeVsCodeTerminal({
-            serverId: args.ipcServer,
-            terminalId: args.terminalId,
-        });
+        if (args.ipcServer) {
+            await closeVsCodeTerminal({
+                serverId: args.ipcServer,
+                terminalId: args.terminalId,
+            });
+        }
+    } else {
+        // TODO: Change to VS Code info message
+        spinner.warn("Template files not found");
     }
 })();
