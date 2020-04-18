@@ -33,39 +33,44 @@ export default new Template({
     template: ({ name, componentParts, parts }, { template: { prefix } }) => {
         return [
             {
-                path: "component.html",
-                content: `
-                  <div class="">
-                      <ng-content></ng-content>
-                  </div>
-                `,
-            },
-            {
-                path: `component.scss`,
-                content: `
-                  .${prefix}-${name} {}
-                `,
-            },
-            {
-                path: `component.ts`,
-                content: `
-                  import { Component, ChangeDetectionStrategy } from '@angular/core';
-
-                  @Component({
-                    selector: '${prefix}-${name}',
-                    templateUrl: '${name}.html',
-                    styleUrls: ['${name}.scss'],
-                    changeDetection: ChangeDetectionStrategy.OnPush
-                  })
-                    export class ${name} {
-                  }
-                `,
-            },
-            {
-                path: `index.ts`,
-                content: `
-                  export * from './${name}'
-                `,
+                path: "component",
+                children: [
+                    {
+                        path: "component.html",
+                        content: `
+                      <div class="">
+                          <ng-content></ng-content>
+                      </div>
+                    `,
+                    },
+                    {
+                        path: `component.scss`,
+                        content: `
+                      .${prefix}-${name} {}
+                    `,
+                    },
+                    {
+                        path: `component.ts`,
+                        content: `
+                      import { Component, ChangeDetectionStrategy } from '@angular/core';
+    
+                      @Component({
+                        selector: '${prefix}-${name}',
+                        templateUrl: '${name}.html',
+                        styleUrls: ['${name}.scss'],
+                        changeDetection: ChangeDetectionStrategy.OnPush
+                      })
+                        export class ${name} {
+                      }
+                    `,
+                    },
+                    {
+                        path: `index.ts`,
+                        content: `
+                      export * from './${name}'
+                    `,
+                    },
+                ],
             },
         ];
     },
