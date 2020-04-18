@@ -1,4 +1,4 @@
-import { Template } from "genry";
+import { Template, html } from "genry";
 import { snakeCase } from "lodash-es";
 
 export default new Template({
@@ -37,11 +37,11 @@ export default new Template({
                 children: [
                     {
                         path: "component.html",
-                        content: `
-                      <div class="">
-                          <ng-content></ng-content>
-                      </div>
-                    `,
+                        content: html`
+                            <div class="${prefix}">
+                                <ng-content></ng-content>
+                            </div>
+                        `,
                     },
                     {
                         path: `component.scss`,
@@ -66,9 +66,7 @@ export default new Template({
                     },
                     {
                         path: `index.ts`,
-                        content: `
-                      export * from './${name}'
-                    `,
+                        content: `export * from './${name}'`,
                     },
                 ],
             },
