@@ -75,11 +75,12 @@ class Genry {
 
     private async searchTemplates(): Promise<Template[]> {
         const files = await promisify(glob)(
-            this.config.include || `**/*.${TEMPLATE_TYPE}.*`,
+            `${this.config.include || "**"}/*.${TEMPLATE_TYPE}.(ts|js)`,
             {
                 dot: true,
+                nodir: true,
                 cwd: this.packagePath,
-                ignore: this.config.exclude || "**/node_modules",
+                ignore: this.config.exclude,
             }
         );
         if (!files.length) {
