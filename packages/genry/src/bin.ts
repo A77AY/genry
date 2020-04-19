@@ -76,12 +76,12 @@ class Genry {
         this.config = config;
         this.path = path;
         register({
+            ...(config?.registerOptions || {}),
             compilerOptions: {
                 allowJs: true,
                 module: "CommonJS",
                 ...(config?.registerOptions?.compilerOptions || {}),
             },
-            ...(config?.registerOptions || {}),
         });
     }
 
