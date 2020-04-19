@@ -210,13 +210,13 @@ export default [
 
                             ${[
                                 hasComponent
-                                    ? `export * from './${filename}.component.ts'`
+                                    ? `export * from './${filename}.component'`
                                     : "",
                                 hasPipe
-                                    ? `export * from './${filename}.pipe.ts'`
+                                    ? `export * from './${filename}.pipe'`
                                     : "",
                                 hasService
-                                    ? `export * from './${filename}.service.ts'`
+                                    ? `export * from './${filename}.service'`
                                     : "",
                             ]
                                 .filter((v) => v)
@@ -261,16 +261,14 @@ export default [
                         path: `index.ts`,
                         content: [
                             hasComponent
-                                ? `export * from './${filename}.component.ts'`
+                                ? `export * from './${filename}.component'`
                                 : "",
                             hasModule
-                                ? `export * from './${filename}.module.ts'`
+                                ? `export * from './${filename}.module'`
                                 : "",
-                            hasPipe
-                                ? `export * from './${filename}.pipe.ts'`
-                                : "",
+                            hasPipe ? `export * from './${filename}.pipe'` : "",
                             hasService
-                                ? `export * from './${filename}.service.ts'`
+                                ? `export * from './${filename}.service'`
                                 : "",
                         ]
                             .filter((v) => v)
