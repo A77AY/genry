@@ -159,7 +159,6 @@ register({
     compilerOptions: {
         allowJs: true,
     },
-    ignore: [],
 });
 
 (async () => {
