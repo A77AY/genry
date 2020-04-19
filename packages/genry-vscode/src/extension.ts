@@ -17,19 +17,19 @@ const terminalsProgress = new Map<
 export function activate(context: vscode.ExtensionContext) {
     ipc.config.id = uuid();
     ipc.serve(() => {
-        ipc.server.on("notFound", (terminalId) => {
+        ipc.server.on("notFound", ({ terminalId }) => {
             vscode.window.showWarningMessage("Templates not found");
             terminalsProgress
                 .get(getTerminalByName(terminalId))
                 .progressResolve();
         });
-        ipc.server.on("found", (terminalId) => {
+        ipc.server.on("found", ({ terminalId }) => {
             const terminal = getTerminalByName(terminalId);
             terminalsProgress.get(terminal).progressResolve();
             terminalsProgress.delete(terminal);
             terminal.show();
         });
-        ipc.server.on("end", (terminalId, socket) => {
+        ipc.server.on("end", ({ terminalId }, socket) => {
             ipc.server.emit(socket, "end");
             getTerminalByName(terminalId).dispose();
         });
@@ -58,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.withProgress(
                     {
                         location: ProgressLocation.Window,
-                        title: "Search templates",
+                        title: "Genry",
                         cancellable: true,
                     },
                     (progress, token) => {
