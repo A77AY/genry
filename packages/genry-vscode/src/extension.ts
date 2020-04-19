@@ -49,11 +49,11 @@ export function activate(context: vscode.ExtensionContext) {
             "genry.createByMenu",
             async ({ fsPath }: { fsPath: string }) => {
                 const terminal = vscode.window.createTerminal({
-                    name: `${TERMINAL_NAME} ${uuid()}`,
+                    name: `${TERMINAL_NAME}_${uuid()}`,
                     hideFromUser: true,
                 });
                 terminal.sendText(
-                    `npx genry --path "${fsPath}" --ipcServer ${ipc.config.id} --terminalId "${terminal.name}"`
+                    `npx genry --path "${fsPath}" --ipcServer "${ipc.config.id}" --terminalId "${terminal.name}"`
                 );
                 vscode.window.withProgress(
                     {
