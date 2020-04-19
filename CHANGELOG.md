@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/KrickRay/genry/compare/v0.10.7...v0.11.0) (2020-04-19)
+
+
+### Features
+
+* refactor cli ([6648ea5](https://github.com/KrickRay/genry/commit/6648ea5552aa6d3e168de2aedcbdb79209a5f958))
+* rewrite CLI ([cdef169](https://github.com/KrickRay/genry/commit/cdef169fcdc0b6dd49254fe167064bb857923591))
+
+
+
+
+
 ## [0.10.7](https://github.com/KrickRay/genry/compare/v0.10.6...v0.10.7) (2020-04-19)
 
 
