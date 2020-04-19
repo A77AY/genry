@@ -4,6 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as prettier from "prettier";
 import { Prompt, promptsToPromptsObject } from "./tree-prompt";
+import { Options } from "prettier";
 
 interface FileTemplate {
     path: string;
@@ -17,10 +18,11 @@ interface DirectoryTemplate {
 
 type StructureTemplate = FileTemplate | DirectoryTemplate;
 
-interface Args {
+interface LaunchConfig {
     path: string;
-    ipcServer: string;
-    terminalId: string;
+    packagePath: string;
+    ipcServer?: string;
+    terminalId?: string;
 }
 
 interface TemplateParams {
@@ -60,43 +62,76 @@ export class Template<T extends string = string, C extends any = any> {
         this.template = template;
     }
 
-    async generate(config: C, args: Args) {
+    async generate(launchConfig: LaunchConfig, config: C) {
         const answers = await prompts(this.questions);
-        const params: TemplateParams = { path: args.path };
+        const params: TemplateParams = { path: launchConfig.path };
         const template = await this.template(answers, config, params);
+        const prettierConfig = await prettier.resolveConfig(
+            launchConfig.packagePath
+        );
+
         await Promise.all(
             template.map(async (result) =>
-                this.generateStructure(result, params.path)
+                this.generateStructure({
+                    structureTemplate: result,
+                    rootPath: params.path,
+                    prettierConfig: prettierConfig,
+                })
             )
         );
     }
 
-    private async generateStructure(
-        structureTemplate: StructureTemplate,
-        rootPath: string
-    ) {
-        const prettierFileInfo = await prettier.getFileInfo(
-            structureTemplate.path
-        );
+    private async generateStructure({
+        structureTemplate,
+        rootPath,
+        prettierConfig,
+    }: {
+        structureTemplate: StructureTemplate;
+        rootPath: string;
+        prettierConfig: prettier.Options;
+    }) {
         const resultPath = path.join(rootPath, structureTemplate.path);
+
         if (isFileTemplate(structureTemplate)) {
-            const resultContent = prettierFileInfo.ignored
-                ? structureTemplate.content
-                : prettier.format(structureTemplate.content, {
-                      parser: prettierFileInfo.inferredParser as prettier.Options["parser"],
-                  });
             this.createDirectory(path.dirname(resultPath));
-            await fs.promises.writeFile(resultPath, resultContent);
+            await fs.promises.writeFile(
+                resultPath,
+                await this.formatContent(
+                    resultPath,
+                    structureTemplate.content,
+                    prettierConfig
+                )
+            );
         } else {
             this.createDirectory(resultPath);
             if (structureTemplate.children) {
                 await Promise.all(
-                    structureTemplate.children.map((child) =>
-                        this.generateStructure(child, resultPath)
+                    structureTemplate.children.map((childTermplate) =>
+                        this.generateStructure({
+                            structureTemplate: childTermplate,
+                            rootPath: resultPath,
+                            prettierConfig,
+                        })
                     )
                 );
             }
         }
+    }
+
+    private async formatContent(
+        filePath: string,
+        content: string,
+        prettierConfig: prettier.Options
+    ) {
+        const { ignored, inferredParser } = await prettier.getFileInfo(
+            filePath
+        );
+        return ignored
+            ? content
+            : prettier.format(content, {
+                  ...prettierConfig,
+                  parser: inferredParser as Options["parser"],
+              });
     }
 
     private createDirectory(dirPath: string) {

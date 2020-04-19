@@ -65,13 +65,17 @@ async function searchTemplates({
             ? "Prepare template"
             : `Prepare ${files.length} templates`;
 
+    return await loadTemplates(cwd, files);
+}
+
+async function loadTemplates(cwd: string, files: string[]) {
     const startedCwd = process.cwd();
     process.chdir(cwd);
 
     const templates = (
         await Promise.all(
             files.map((file) =>
-                import(path.join(process.cwd(), file)).then(
+                import(path.join(cwd, file)).then(
                     (f) => f.default as Template | Template[]
                 )
             )
@@ -160,7 +164,15 @@ async function selectTemplate(templates: Template[]) {
         const template = await selectTemplate(templates);
 
         if (template) {
-            await template.generate(config, args);
+            await template.generate(
+                {
+                    path: args.path,
+                    packagePath,
+                    ipcServer: args.ipcServer,
+                    terminalId: args.terminalId,
+                },
+                config
+            );
         }
 
         if (args.ipcServer) {
