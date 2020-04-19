@@ -45,9 +45,3 @@ yarn install
 ```sh
 yarn workspace genry watch
 ```
-
-### Publish
-
-```sh
-yarn workspace genry publish
-```

@@ -1,6 +1,6 @@
 {
     "name": "genry-vscode",
-    "displayName": "Genry Scaffolder",
+    "displayName": "Genry scaffolder tool",
     "description": "Genry VS Code Scaffolder Extension",
     "keywords": [
         "scaffolder",

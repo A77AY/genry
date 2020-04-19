@@ -1,6 +1,6 @@
 {
     "name": "genry",
-    "description": "Genry Scaffolder CLI",
+    "description": "Genry CLI",
     "keywords": [
         "scaffolder",
         "generator"

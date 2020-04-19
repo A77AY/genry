@@ -48,9 +48,3 @@ yarn install
     ```
 
 1. `VS Code / Debug: Start Debugging`
-
-### Publish
-
-```sh
-yarn workspace genry-vscode publish:vsc
-```
