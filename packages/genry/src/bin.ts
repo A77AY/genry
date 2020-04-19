@@ -158,6 +158,7 @@ class Genry {
 register({
     compilerOptions: {
         allowJs: true,
+        module: "CommonJS",
     },
 });
 
