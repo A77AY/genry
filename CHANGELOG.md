@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.6](https://github.com/KrickRay/genry/compare/v0.10.5...v0.10.6) (2020-04-19)
+
+
+### Bug Fixes
+
+* allow JS by default ([ef72257](https://github.com/KrickRay/genry/commit/ef72257933f6e8cebfc49691c3f9cac6ef47d71c))
+
+
+
+
+
 ## [0.10.5](https://github.com/KrickRay/genry/compare/v0.10.4...v0.10.5) (2020-04-19)
 
 
