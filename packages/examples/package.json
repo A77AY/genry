@@ -1,7 +1,7 @@
 {
     "name": "@genry/examples",
     "description": "Genry Scaffolder Examples",
-    "version": "0.10.2",
+    "private": true,
     "license": "MIT",
     "author": {
         "name": "Rinat Arsaev",

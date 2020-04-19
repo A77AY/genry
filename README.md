@@ -48,10 +48,16 @@ Documentation is in progress, but you can see [examples](https://github.com/Kric
 yarn install
 ```
 
-### Start, Publish...
+### Start
 
 -   [CLI](https://github.com/KrickRay/genry/tree/master/packages/genry)
 -   [VS Code Extension](https://github.com/KrickRay/genry/tree/master/packages/genry-vscode)
+
+### Publish
+
+```sh
+yarn release
+```
 
 ### License
 

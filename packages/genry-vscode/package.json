@@ -7,6 +7,7 @@
         "generator"
     ],
     "version": "0.10.2",
+    "private": true,
     "license": "MIT",
     "author": {
         "name": "Rinat Arsaev",
@@ -50,7 +51,7 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn compile",
-        "publish:vsc": "vsce publish",
+        "release": "vsce publish",
         "compile": "yarn clear && tsc -p ./",
         "lint": "eslint src --ext ts",
         "watch": "yarn clear && tsc -watch -p ./",

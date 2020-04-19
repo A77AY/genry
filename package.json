@@ -13,11 +13,10 @@
         "type": "git",
         "url": "https://github.com/KrickRay/genry.git"
     },
-    "version": "0.2.0",
     "private": true,
     "license": "MIT",
     "scripts": {
-        "release": "cross-env HUSKY_BYPASS=true lerna publish"
+        "release": "npx lerna version && yarn workspace genry-vscode release && yarn workspace genry publish"
     },
     "workspaces": {
         "packages": [
