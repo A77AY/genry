@@ -1,7 +1,7 @@
 {
     "name": "@genry/examples",
     "description": "Genry examples",
-    "version": "0.13.6",
+    "version": "0.14.0",
     "private": true,
     "license": "MIT",
     "author": {
@@ -13,7 +13,7 @@
     },
     "devDependencies": {
         "@types/lodash": "^4.14.150",
-        "genry": "^0.13.4",
+        "genry": "^0.14.0",
         "lodash": "^4.17.15"
     }
 }

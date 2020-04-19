@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/KrickRay/genry/compare/v0.13.6...v0.14.0) (2020-04-19)
+
+
+### Bug Fixes
+
+* importing error ([aa34a2a](https://github.com/KrickRay/genry/commit/aa34a2a7bb4d48c6d4050d657d34c6d3b9f3f548))
+
+
+### Features
+
+* add compilerOptions ([638eab4](https://github.com/KrickRay/genry/commit/638eab489959b91ba07fa5f7324811d7eaff2db0))
+
+
+
+
+
 ## [0.13.4](https://github.com/KrickRay/genry/compare/v0.13.3...v0.13.4) (2020-04-19)
 
 
