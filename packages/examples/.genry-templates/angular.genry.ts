@@ -1,4 +1,4 @@
-import { Template, html, css } from "genry";
+import { Template, html, css, StructureTemplate } from "genry";
 import { kebabCase, camelCase, upperFirst } from "lodash";
 
 enum ComponentPart {
@@ -13,6 +13,83 @@ enum Part {
     pipe,
     component,
     index,
+}
+
+function createComponentTemplate(
+    prefix: string,
+    name: string,
+    componentParts: ComponentPart[]
+) {
+    const filename = kebabCase(name);
+    const selector = kebabCase(`${prefix}-${name}`);
+    const className = upperFirst(camelCase(name));
+
+    const hasStyle = componentParts.includes(ComponentPart.style);
+    const hasTheme = componentParts.includes(ComponentPart.theme);
+    const hasTemplate = componentParts.includes(ComponentPart.template);
+
+    const children: StructureTemplate[] = [];
+
+    children.push({
+        path: `${filename}.component.ts`,
+        content: `
+            import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+            @Component({
+                selector: '${selector}',
+                templateUrl: ${
+                    hasTemplate
+                        ? `'${filename}.component.html'`
+                        : "`<ng-content></ng-content>`"
+                },
+                ${hasStyle ? `styleUrls: ['${filename}.component.scss'],` : ""}
+                changeDetection: ChangeDetectionStrategy.OnPush
+            })
+            export class ${className}Component {}
+        `,
+    });
+
+    if (hasStyle) {
+        children.push({
+            path: `${filename}.component.scss`,
+            content: css`
+                :host {
+                    .${selector} {
+                    }
+                }
+            `,
+        });
+    }
+    if (hasTheme) {
+        children.push({
+            path: `_${filename}-theme.scss`,
+            content: css`
+                @import "~@angular/material/theming";
+
+                @mixin ${selector}-theme ($theme) {
+                    .${selector} {
+                    }
+                }
+
+                @mixin ${selector}-typography ($config) {
+                    .${selector} {
+                    }
+                }
+            `,
+        });
+    }
+    if (hasTemplate) {
+        children.push({
+            path: `${filename}.component.html`,
+            content: html`
+                <div class="${selector}">
+                    <ng-content></ng-content>
+                </div>
+            `,
+        });
+    }
+
+    return children;
 }
 
 export default [
@@ -96,7 +173,6 @@ export default [
                 { template: { prefix } }
             ) => {
                 const filename = kebabCase(name);
-                const selector = kebabCase(`${prefix}-${name}`);
                 const camelCaseName = camelCase(name);
                 const className = upperFirst(camelCaseName);
 
@@ -106,81 +182,12 @@ export default [
                 const hasComponent = parts.includes(Part.component);
                 const hasIndex = parts.includes(Part.index);
 
-                const children = [];
+                const children: StructureTemplate[] = [];
 
                 if (hasComponent) {
-                    const hasStyle = componentParts.includes(
-                        ComponentPart.style
+                    children.push(
+                        ...createComponentTemplate(prefix, name, componentParts)
                     );
-                    const hasTheme = componentParts.includes(
-                        ComponentPart.theme
-                    );
-                    const hasTemplate = componentParts.includes(
-                        ComponentPart.template
-                    );
-
-                    children.push({
-                        path: `${filename}.component.ts`,
-                        content: `
-                                import { ChangeDetectionStrategy, Component } from '@angular/core';
-                
-                                @Component({
-                                    selector: '${selector}',
-                                    templateUrl: ${
-                                        hasTemplate
-                                            ? `'${filename}.component.html'`
-                                            : "`<ng-content></ng-content>`"
-                                    },
-                                    ${
-                                        hasStyle
-                                            ? `styleUrls: ['${filename}.component.scss'],`
-                                            : ""
-                                    }
-                                    changeDetection: ChangeDetectionStrategy.OnPush
-                                })
-                                export class ${className}Component {}
-                            `,
-                    });
-
-                    if (hasStyle) {
-                        children.push({
-                            path: `${filename}.component.scss`,
-                            content: css`
-                                :host {
-                                    .${selector} {
-                                    }
-                                }
-                            `,
-                        });
-                    }
-                    if (hasTheme) {
-                        children.push({
-                            path: `_${filename}-theme.scss`,
-                            content: css`
-                                @import "~@angular/material/theming";
-
-                                @mixin ${selector}-theme ($theme) {
-                                    .${selector} {
-                                    }
-                                }
-
-                                @mixin ${selector}-typography ($config) {
-                                    .${selector} {
-                                    }
-                                }
-                            `,
-                        });
-                    }
-                    if (hasTemplate) {
-                        children.push({
-                            path: `${filename}.component.html`,
-                            content: html`
-                                <div class="${selector}">
-                                    <ng-content></ng-content>
-                                </div>
-                            `,
-                        });
-                    }
                 }
                 if (hasService) {
                     children.push({
