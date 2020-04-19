@@ -1,5 +1,5 @@
 import { Template, html, css } from "genry";
-import { kebabCase, camelCase, capitalize } from "lodash";
+import { kebabCase, camelCase, upperFirst } from "lodash";
 
 enum ComponentPart {
     template,
@@ -12,6 +12,7 @@ enum Part {
     module,
     pipe,
     component,
+    index,
 }
 
 export default [
@@ -23,6 +24,7 @@ export default [
     ({ name, value }) =>
         new Template({
             name,
+            description: "Angular",
             questions: [
                 {
                     type: "text",
@@ -35,14 +37,14 @@ export default [
                     message: "Pick parts",
                     choices: [
                         {
-                            title: "Component",
-                            value: Part.component,
-                            selected: value === Part.component,
-                        },
-                        {
                             title: "Module",
                             value: Part.module,
                             selected: value === Part.module,
+                        },
+                        {
+                            title: "Component",
+                            value: Part.component,
+                            selected: value === Part.component,
                         },
                         {
                             title: "Service",
@@ -53,6 +55,11 @@ export default [
                             title: "Pipe",
                             value: Part.pipe,
                             selected: value === Part.pipe,
+                        },
+                        {
+                            title: "Index",
+                            value: Part.index,
+                            selected: true,
                         },
                     ] as any,
                 },
@@ -75,20 +82,29 @@ export default [
                         { title: "Theme", value: ComponentPart.theme },
                     ] as any,
                 },
+                {
+                    type: "toggle",
+                    name: "hasDirectory",
+                    message: "With directory",
+                    initial: true,
+                    active: "Yes",
+                    inactive: "No",
+                },
             ],
             template: (
-                { name, componentParts, parts },
+                { name, componentParts, parts, hasDirectory },
                 { template: { prefix } }
             ) => {
                 const filename = kebabCase(name);
                 const selector = kebabCase(`${prefix}-${name}`);
-                const className = capitalize(camelCase(name));
-                console.log(selector);
+                const camelCaseName = camelCase(name);
+                const className = upperFirst(camelCaseName);
 
                 const hasService = parts.includes(Part.service);
                 const hasModule = parts.includes(Part.module);
                 const hasPipe = parts.includes(Part.pipe);
                 const hasComponent = parts.includes(Part.component);
+                const hasIndex = parts.includes(Part.index);
 
                 const children = [];
 
@@ -113,11 +129,11 @@ export default [
                                     templateUrl: ${
                                         hasTemplate
                                             ? `'${filename}.component.html'`
-                                            : "<ng-content></ng-content>"
+                                            : "`<ng-content></ng-content>`"
                                     },
                                     ${
                                         hasStyle
-                                            ? `styleUrls: ['${name}.component.scss'],`
+                                            ? `styleUrls: ['${filename}.component.scss'],`
                                             : ""
                                     }
                                     changeDetection: ChangeDetectionStrategy.OnPush
@@ -179,19 +195,90 @@ export default [
                         `,
                     });
                 }
+                if (hasModule) {
+                    children.push({
+                        path: `${filename}.module.ts`,
+                        content: `
+                            import { NgModule } from '@angular/core';
 
-                return [
-                    {
-                        path: filename,
-                        children: [
-                            {
-                                path: `index.ts`,
-                                content: `export * from './${filename}.component.ts'`,
-                            },
-                            ...children,
-                        ],
-                    },
-                ];
+                            ${[
+                                hasComponent
+                                    ? `export * from './${filename}.component.ts'`
+                                    : "",
+                                hasPipe
+                                    ? `export * from './${filename}.pipe.ts'`
+                                    : "",
+                                hasService
+                                    ? `export * from './${filename}.service.ts'`
+                                    : "",
+                            ]
+                                .filter((v) => v)
+                                .join("\n")}
+
+                            const EXPORTED_DECLARATIONS = [${[
+                                hasComponent ? `${className}Component` : "",
+                                hasPipe ? `${className}Pipe` : "",
+                            ]
+                                .filter((v) => v)
+                                .join(",")}];
+                            
+                            @NgModule({
+                                imports: [],
+                                declarations: EXPORTED_DECLARATIONS,
+                                exports: EXPORTED_DECLARATIONS,
+                                providers: [${
+                                    hasService ? `${className}Service` : ""
+                                }]
+                            })
+                            export class ${className}Module {}
+                        `,
+                    });
+                }
+                if (hasPipe) {
+                    children.push({
+                        path: `${filename}.pipe.ts`,
+                        content: `
+                            import { Pipe, PipeTransform } from '@angular/core';
+
+                            @Pipe({name: '${camelCaseName}'})
+                            export class ${className}Pipe implements PipeTransform {
+                                transform(value: any) {
+                                    return value;
+                                }
+                            }
+                        `,
+                    });
+                }
+                if (hasIndex) {
+                    children.push({
+                        path: `index.ts`,
+                        content: [
+                            hasComponent
+                                ? `export * from './${filename}.component.ts'`
+                                : "",
+                            hasModule
+                                ? `export * from './${filename}.module.ts'`
+                                : "",
+                            hasPipe
+                                ? `export * from './${filename}.pipe.ts'`
+                                : "",
+                            hasService
+                                ? `export * from './${filename}.service.ts'`
+                                : "",
+                        ]
+                            .filter((v) => v)
+                            .join("\n"),
+                    });
+                }
+
+                return hasDirectory
+                    ? [
+                          {
+                              path: filename,
+                              children,
+                          },
+                      ]
+                    : children;
             },
         })
 );
