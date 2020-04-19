@@ -16,7 +16,7 @@
     "private": true,
     "license": "MIT",
     "scripts": {
-        "release": "npx lerna version && yarn workspace genry-vscode release && yarn workspace genry publish"
+        "release": "lerna version && lerna publish from-git --yes && yarn workspace genry-vscode release"
     },
     "workspaces": {
         "packages": [
