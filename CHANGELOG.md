@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.1](https://github.com/KrickRay/genry/compare/v0.11.0...v0.11.1) (2020-04-19)
+
+
+### Bug Fixes
+
+* upd yargs command ([a7d0413](https://github.com/KrickRay/genry/commit/a7d041371a35b4f9e2cba24b9ee2d7fadea3da6e))
+
+
+
+
+
 # [0.11.0](https://github.com/KrickRay/genry/compare/v0.10.7...v0.11.0) (2020-04-19)
 
 
