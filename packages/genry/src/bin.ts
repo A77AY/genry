@@ -102,16 +102,23 @@ class Genry {
         process.chdir(this.packagePath);
         const templates = (
             await Promise.all(
-                files.map((file) =>
-                    import(path.join(this.packagePath, file)).then(
-                        (f) => f.default as Template | Template[]
-                    )
-                )
+                files.map((file) => {
+                    try {
+                        return import(path.join(this.packagePath, file)).then(
+                            (f) => f.default as Template | Template[]
+                        );
+                    } catch (e) {
+                        console.error(e);
+                        return Promise.resolve(null);
+                    }
+                })
             )
-        ).reduce<Template[]>(
-            (acc, t) => acc.concat(Array.isArray(t) ? t : [t]),
-            []
-        );
+        )
+            .filter((v) => v)
+            .reduce<Template[]>(
+                (acc, t) => acc.concat(Array.isArray(t) ? t : [t]),
+                []
+            );
         process.chdir(startedCwd);
         this.spinner.succeed("Templates loaded");
         return templates;
