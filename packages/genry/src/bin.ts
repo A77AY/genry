@@ -6,7 +6,7 @@ import { cosmiconfig } from "cosmiconfig";
 import * as glob from "glob";
 import { promisify } from "util";
 import * as path from "path";
-import { register } from "ts-node";
+import { register, RegisterOptions } from "ts-node";
 import { Template } from "./template";
 import * as ora from "ora";
 import * as pkgUp from "pkg-up";
@@ -52,7 +52,11 @@ async function getInitConfig() {
 class Genry {
     vscodeExtension: VscodeExtension;
     packagePath: string;
-    config: { include?: string; exclude?: string; compilerOptions?: object };
+    config: {
+        include?: string;
+        exclude?: string;
+        registerOptions?: RegisterOptions;
+    };
     path: string;
     spinner: Ora = ora();
 
@@ -75,8 +79,9 @@ class Genry {
             compilerOptions: {
                 allowJs: true,
                 module: "CommonJS",
-                ...(config.compilerOptions || {}),
+                ...(config?.registerOptions?.compilerOptions || {}),
             },
+            ...(config?.registerOptions || {}),
         });
     }
 
