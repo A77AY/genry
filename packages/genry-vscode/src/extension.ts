@@ -19,9 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
     ipc.serve(() => {
         ipc.server.on("notFound", ({ terminalId }) => {
             vscode.window.showWarningMessage("Templates not found");
-            terminalsProgress
-                .get(getTerminalByName(terminalId))
-                .progressResolve();
+            const terminal = getTerminalByName(terminalId);
+            terminalsProgress.get(terminal).progressResolve();
+            terminalsProgress.delete(terminal);
         });
         ipc.server.on("found", ({ terminalId }) => {
             const terminal = getTerminalByName(terminalId);
@@ -70,6 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
                         });
 
                         token.onCancellationRequested(() => {
+                            terminal.dispose();
                             terminalsProgress.delete(terminal);
                         });
 
