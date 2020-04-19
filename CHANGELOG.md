@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.4](https://github.com/KrickRay/genry/compare/v0.13.3...v0.13.4) (2020-04-19)
+
+
+### Bug Fixes
+
+* module: "CommonJS" ([e5b2c91](https://github.com/KrickRay/genry/commit/e5b2c919f99397f42c40fc9c52f79dd5bf81b41e))
+
+
+
+
+
 ## [0.13.3](https://github.com/KrickRay/genry/compare/v0.13.2...v0.13.3) (2020-04-19)
 
 **Note:** Version bump only for package @genry/root
