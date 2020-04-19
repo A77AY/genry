@@ -46,13 +46,13 @@ async function getInitConfig() {
             .search(args.path)
             .then((c) => c?.config),
     ]);
-    return { args, packagePath, config };
+    return { args, packagePath, config: config || {} };
 }
 
 class Genry {
     vscodeExtension: VscodeExtension;
     packagePath: string;
-    config: any;
+    config: { include?: string; exclude?: string };
     path: string;
     spinner: Ora = ora();
 
@@ -74,10 +74,14 @@ class Genry {
     }
 
     private async searchTemplates(): Promise<Template[]> {
-        const files = await promisify(glob)(`**/*.${TEMPLATE_TYPE}.*`, {
-            dot: true,
-            cwd: this.packagePath,
-        });
+        const files = await promisify(glob)(
+            this.config.include || `**/*.${TEMPLATE_TYPE}.*`,
+            {
+                dot: true,
+                cwd: this.packagePath,
+                ignore: this.config.exclude || "**/node_modules",
+            }
+        );
         if (!files.length) {
             return [];
         }
