@@ -1,7 +1,7 @@
 {
     "name": "@genry/examples",
     "description": "Genry examples",
-    "version": "0.13.4",
+    "version": "0.13.6",
     "private": true,
     "license": "MIT",
     "author": {

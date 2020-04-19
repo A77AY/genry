@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.6](https://github.com/KrickRay/genry/compare/v0.13.5...v0.13.6) (2020-04-19)
+
+
+### Bug Fixes
+
+* ts import ([0ce0cf7](https://github.com/KrickRay/genry/commit/0ce0cf7125a09b25767756be2478531c404076be))
+
+
+
+
+
 ## [0.13.5](https://github.com/KrickRay/genry/compare/v0.13.4...v0.13.5) (2020-04-19)
 
 
