@@ -1,27 +1,37 @@
 import * as vscode from "vscode";
 import * as ipc from "node-ipc";
 import { v4 as uuid } from "uuid";
+import { Terminal, Progress, ProgressLocation } from "vscode";
 
-const TERMINAL_NAME = "Genry Scaffolder";
+const TERMINAL_NAME = "Genry";
 
-async function getTerminalByProccessId(processId: number) {
-    const processes = await Promise.all(
-        vscode.window.terminals.map(async (terminal) => ({
-            processId: await terminal.processId,
-            terminal,
-        }))
-    );
-    return processes.find(async (t) => t.processId === processId).terminal;
+function getTerminalByName(name: string) {
+    return vscode.window.terminals.find((t) => t.name === name);
 }
+
+const terminalsProgress = new Map<
+    Terminal,
+    { progress: Progress<any>; progressResolve: () => any }
+>();
 
 export function activate(context: vscode.ExtensionContext) {
     ipc.config.id = uuid();
     ipc.serve(() => {
-        ipc.server.on("end", async (data, socket) => {
+        ipc.server.on("notFound", (terminalId) => {
+            vscode.window.showWarningMessage("Templates not found");
+            terminalsProgress
+                .get(getTerminalByName(terminalId))
+                .progressResolve();
+        });
+        ipc.server.on("found", (terminalId) => {
+            const terminal = getTerminalByName(terminalId);
+            terminalsProgress.get(terminal).progressResolve();
+            terminalsProgress.delete(terminal);
+            terminal.show();
+        });
+        ipc.server.on("end", (terminalId, socket) => {
             ipc.server.emit(socket, "end");
-            vscode.window.showInformationMessage("Success scuffolding!");
-            const terminal = await getTerminalByProccessId(data);
-            terminal.dispose();
+            getTerminalByName(terminalId).dispose();
         });
     });
     ipc.server.start();
@@ -38,13 +48,38 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(
             "genry.createByMenu",
             async ({ fsPath }: { fsPath: string }) => {
-                const terminal = vscode.window.createTerminal(TERMINAL_NAME);
+                const terminal = vscode.window.createTerminal({
+                    name: `${TERMINAL_NAME} ${uuid()}`,
+                    hideFromUser: true,
+                });
                 terminal.sendText(
-                    `npx genry --path "${fsPath}" --ipcServer ${
-                        ipc.config.id
-                    } --terminalId ${await terminal.processId}`
+                    `npx genry --path "${fsPath}" --ipcServer ${ipc.config.id} --terminalId "${terminal.name}"`
                 );
-                terminal.show();
+                vscode.window.withProgress(
+                    {
+                        location: ProgressLocation.Window,
+                        title: "Search templates",
+                        cancellable: true,
+                    },
+                    (progress, token) => {
+                        const result$ = new Promise((res) => {
+                            terminalsProgress.set(terminal, {
+                                progress,
+                                progressResolve: () => res(),
+                            });
+                        });
+
+                        token.onCancellationRequested(() => {
+                            terminalsProgress.delete(terminal);
+                        });
+
+                        progress.report({
+                            message: "Search templates",
+                        });
+
+                        return result$;
+                    }
+                );
             }
         )
     );

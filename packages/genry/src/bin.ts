@@ -2,7 +2,6 @@
 
 import * as yargs from "yargs";
 import * as ipc from "node-ipc";
-import * as clear from "console-clear";
 import * as prompts from "prompts";
 import { cosmiconfig } from "cosmiconfig";
 import * as glob from "glob";
@@ -18,38 +17,45 @@ import { Ora } from "ora";
 const MODULE_NAME = "genry";
 const TEMPLATE_TYPE = "genry";
 
-function closeVsCodeTerminal({
-    serverId,
-    terminalId,
-}: {
-    serverId: string;
-    terminalId: string;
-}) {
-    ipc.config.silent = true;
+class Status {
+    ipcServer$: Promise<any>;
 
-    return new Promise((res) => {
-        ipc.connectTo(serverId, () => {
-            const ipcServer = ipc.of[serverId];
+    constructor(public serverId: string, public terminalId: string) {
+        if (serverId) {
+            ipc.config.silent = true;
 
-            ipcServer.on("connect", async () => {
-                ipcServer.emit("end", terminalId);
+            this.ipcServer$ = new Promise((res) => {
+                ipc.connectTo(serverId, () => {
+                    const ipcServer = ipc.of[serverId];
+                    res(ipcServer);
+
+                    ipcServer.on("end", () => {
+                        ipc.disconnect(serverId);
+                    });
+                });
             });
-            ipcServer.on("end", () => {
-                ipc.disconnect(serverId);
-                res();
-            });
-        });
-    });
+        }
+    }
+
+    async emit(command: string, data: any) {
+        if (this.serverId) {
+            (await this.ipcServer$).emit(command, data);
+        }
+    }
 }
 
 async function searchTemplates({
     spinner,
+    terminalId,
     cwd,
     templateType,
+    extension: ststus,
 }: {
     spinner: Ora;
+    terminalId: string;
     cwd: string;
     templateType: string;
+    extension: Status;
 }): Promise<Template[]> {
     const files = await promisify(glob)(`**/*.${templateType}.*`, {
         dot: true,
@@ -64,6 +70,7 @@ async function searchTemplates({
         files.length === 1
             ? "Prepare template"
             : `Prepare ${files.length} templates`;
+    ststus.emit("found", terminalId);
 
     return await loadTemplates(cwd, files);
 }
@@ -124,7 +131,6 @@ async function selectTemplate(templates: Template[]) {
 
 (async () => {
     const spinner = ora();
-    clear();
     spinner.start("Loading templates");
 
     register({ compilerOptions: { allowJs: true } });
@@ -150,16 +156,19 @@ async function selectTemplate(templates: Template[]) {
             .search(args.path)
             .then((c) => c?.config),
     ]);
+    const extension = new Status(args.ipcServer, args.terminalId);
 
     const templates = await searchTemplates({
+        terminalId: args.terminalId,
         spinner,
         cwd: packagePath,
         templateType: TEMPLATE_TYPE,
+        extension,
     });
 
     if (templates.length) {
+        extension.emit("show", args.terminalId);
         spinner.stop();
-        clear();
 
         const template = await selectTemplate(templates);
 
@@ -174,15 +183,8 @@ async function selectTemplate(templates: Template[]) {
                 config
             );
         }
-
-        if (args.ipcServer) {
-            await closeVsCodeTerminal({
-                serverId: args.ipcServer,
-                terminalId: args.terminalId,
-            });
-        }
+        extension.emit("end", args.terminalId);
     } else {
-        // TODO: Change to VS Code info message
-        spinner.warn("Template files not found");
+        extension.emit("notFound", args.terminalId);
     }
 })();
