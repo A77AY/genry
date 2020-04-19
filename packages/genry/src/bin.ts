@@ -52,7 +52,7 @@ async function getInitConfig() {
 class Genry {
     vscodeExtension: VscodeExtension;
     packagePath: string;
-    config: { include?: string; exclude?: string };
+    config: { include?: string; exclude?: string; compilerOptions?: object };
     path: string;
     spinner: Ora = ora();
 
@@ -71,6 +71,13 @@ class Genry {
         this.packagePath = packagePath;
         this.config = config;
         this.path = path;
+        register({
+            compilerOptions: {
+                allowJs: true,
+                module: "CommonJS",
+                ...(config.compilerOptions || {}),
+            },
+        });
     }
 
     private async searchTemplates(): Promise<Template[]> {
@@ -161,13 +168,6 @@ class Genry {
         }
     }
 }
-
-register({
-    compilerOptions: {
-        allowJs: true,
-        module: "CommonJS",
-    },
-});
 
 (async () => {
     const { args, packagePath, config } = await getInitConfig();
