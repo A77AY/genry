@@ -155,7 +155,12 @@ class Genry {
     }
 }
 
-register({ compilerOptions: { allowJs: true } });
+register({
+    compilerOptions: {
+        allowJs: true,
+    },
+    ignore: [],
+});
 
 (async () => {
     const { args, packagePath, config } = await getInitConfig();
