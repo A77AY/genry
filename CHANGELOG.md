@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.5](https://github.com/KrickRay/genry/compare/v0.13.4...v0.13.5) (2020-04-19)
+
+
+### Bug Fixes
+
+* command with whitespace ([6ccdfd2](https://github.com/KrickRay/genry/commit/6ccdfd21319b8a55d3fe89357f2a88b8b7979cec))
+
+
+
+
+
 ## [0.13.4](https://github.com/KrickRay/genry/compare/v0.13.3...v0.13.4) (2020-04-19)
 
 
