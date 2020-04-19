@@ -4,13 +4,15 @@
 
 Generating some code and structure:
 
--   [**CLI** (NPM, NPX)](https://www.npmjs.com/package/genry)
+-   [**CLI**](https://www.npmjs.com/package/genry) (NPM, NPX)
 -   Called from **context menu** ([VS Code extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode), [WebStrom external tool](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html))
 
-*   JavaScript and TypeScript **native templates** (ESNext and working with imports)
-*   **Configurable** throught `.genryrc` config
-*   **Shared templates** by NPM (`node_modules`)
-*   **Formatted code** by [Prettier](https://prettier.io/)
+Tempaltes on JavaScript and TypeScript:
+
+-   **Configurable** throught `.genryrc` config
+-   **Shared templates** by NPM (`node_modules`)
+-   **Formatted code** by [Prettier](https://prettier.io/)
+-   **Prompts** by [Prompts](https://github.com/terkelg/prompts#readme)
 
 ## Installation & Usage
 
