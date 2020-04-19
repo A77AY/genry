@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.2](https://github.com/KrickRay/genry/compare/v0.14.1...v0.14.2) (2020-04-19)
+
+
+### Bug Fixes
+
+* options rewrite order ([564a4b6](https://github.com/KrickRay/genry/commit/564a4b60bcfb9cd6ea0ad2d4d96aad12e1485c74))
+
+
+
+
+
 ## [0.14.1](https://github.com/KrickRay/genry/compare/v0.14.0...v0.14.1) (2020-04-19)
 
 
