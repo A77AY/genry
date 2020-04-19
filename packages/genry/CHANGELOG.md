@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/KrickRay/genry/compare/v0.11.1...v0.12.0) (2020-04-19)
+
+
+### Features
+
+* add include and exclude config ([419c0b9](https://github.com/KrickRay/genry/commit/419c0b9a133020c34f1ea8b4fe8c831d2d35e768))
+
+
+
+
+
 ## [0.11.1](https://github.com/KrickRay/genry/compare/v0.11.0...v0.11.1) (2020-04-19)
 
 
