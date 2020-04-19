@@ -19,19 +19,27 @@ const TEMPLATE_TYPE = "genry";
 
 async function getInitConfig() {
     const args = yargs
-        .command("create", "create by template")
+        .scriptName("genry")
+        .command("$0", "Scaffolding tool")
         .option("path", {
             alias: "p",
             type: "string",
-            description: "Path",
+            description: "The path by which the template will be generated",
             default: process.cwd(),
         })
         .option("ipcServer", {
             type: "string",
+            description: "IPC server for VS Code",
+            hidden: true,
         })
         .option("terminalId", {
             type: "string",
-        }).argv;
+            description: "Terminal id for VS Code",
+            hidden: true,
+        })
+        .help()
+        .alias("help", "h")
+        .alias("version", "v").argv;
     const [packagePath, config] = await Promise.all([
         pkgUp({ cwd: args.path }).then((p) => path.dirname(p)),
         cosmiconfig(MODULE_NAME)
