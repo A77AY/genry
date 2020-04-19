@@ -1,59 +1,58 @@
-# Genry Scaffolder Monorepo
+# Genry &middot; Monorepo &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KrickRay/genry/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/genry.svg)](https://www.npmjs.com/package/genry) [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/krickray.genry-vscode?label=vs%20code%20extension)](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode)
 
-**Scaffolding Tool**<br>
-**For** Generating Code<br>
-**By** JS & TS Templates
+🏗️ **Scaffolding Tool**
+
+Generating some code and structure:
+
+-   [**CLI** (NPM, NPX)](https://www.npmjs.com/package/genry)
+-   Called from **context menu** ([VS Code extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode), [WebStrom external tool](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html))
+
+*   JavaScript and TypeScript **native templates** (ESNext and working with imports)
+*   **Configurable** throught `.genryrc` config
+*   **Shared templates** by NPM (`node_modules`)
+
+## Installation & Usage
 
 ![Sample](sample.gif)
 
-## User-Friendly
+-   [CLI](https://www.npmjs.com/package/genry)
 
--   Beautiful prompts
+    ```sh
+    # NPX
+    npx genry
 
-## JavaScript Environment
+    # NPM
+    npm i genry -g
+    genry
+    ```
 
--   JavaScript & TypeScript templates
--   Full support JavaScript, TypeScript & NodeJS features
+-   [VS Code extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode)
 
-*   [CLI](https://www.npmjs.com/package/genry)
-*   [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode)
-*   Examples
+    ```sh
+    code --install-extension krickray.genry-vscode
+    ```
 
----
+-   WebStorm [external tool](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html)
 
-## Development
+## Documentation
 
-### Initialize
+Documentation is in progress, but you can see [examples](https://github.com/KrickRay/genry/tree/master/packages/examples)
+
+## [Examples](https://github.com/KrickRay/genry/tree/master/packages/examples)
+
+## Contributing
+
+### Installation
 
 ```sh
 yarn install
 ```
 
----
+### Start, Publish...
 
-### CLI
+-   [CLI](https://github.com/KrickRay/genry/tree/master/packages/genry)
+-   [VS Code Extension](https://github.com/KrickRay/genry/tree/master/packages/genry-vscode)
 
-#### Publish
+### License
 
-```sh
-yarn workspace genry publish
-```
-
----
-
-### VS Code Extension
-
-#### Start
-
-1. Compile
-    ```sh
-    yarn workspace genry watch
-    yarn workspace genry-vscode watch
-    ```
-1. VS Code / Debug: Start Debugging
-
-#### Publish
-
-```sh
-yarn workspace genry-vscode publish:vsc
-```
+Genry is [MIT licensed](./LICENSE).

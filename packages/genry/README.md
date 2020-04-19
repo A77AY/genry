@@ -1,28 +1,53 @@
-# Genry Scaffolder CLI
+# Genry &middot; CLI &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KrickRay/genry/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/genry.svg)](https://www.npmjs.com/package/genry)
 
-**Scaffolding Tool**<br>
-**For** Generating Code<br>
-**By** JS & TS Templates
+🏗️ **Scaffolding Tool**
+
+Generating some code and structure:
+
+-   [**CLI** (NPM, NPX)](https://www.npmjs.com/package/genry)
+-   Called from **context menu** ([VS Code extension](https://marketplace.visualstudio.com/items?itemName=krickray.genry-vscode), [WebStrom external tool](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html))
+
+*   JavaScript and TypeScript **native templates** (ESNext and working with imports)
+*   **Configurable** throught `.genryrc` config
+*   **Shared templates** by NPM (`node_modules`)
+
+## Installation & Usage
 
 ![Sample](sample.gif)
 
-## User-Friendly
+```sh
+# NPX
+npx genry
 
--   Beautiful prompts
+# NPM
+npm i genry -g
+genry
+```
 
-## JavaScript Environment
+## Documentation
 
--   JavaScript & TypeScript templates
--   Full support JavaScript, TypeScript & NodeJS features
+Documentation is in progress, but you can see [examples](https://github.com/KrickRay/genry/tree/master/packages/examples)
 
-## Usage
+## [Examples](https://github.com/KrickRay/genry/tree/master/packages/examples)
 
--   NPX
-    ```sh
-    npx genry
-    ```
--   NPM
-    ```sh
-    npm i genry -g
-    genry
-    ```
+---
+
+## Contributing
+
+### Installation
+
+```sh
+yarn install
+```
+
+### Start
+
+```sh
+yarn workspace genry watch
+```
+
+### Publish
+
+```sh
+yarn workspace genry publish
+```
