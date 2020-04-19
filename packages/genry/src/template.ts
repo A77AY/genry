@@ -6,30 +6,30 @@ import * as prettier from "prettier";
 import { Prompt, promptsToPromptsObject } from "./tree-prompt";
 import { Options } from "prettier";
 
-interface FileTemplate {
+export interface FileTemplate {
     path: string;
     content: string;
 }
 
-interface DirectoryTemplate {
+export interface DirectoryTemplate {
     path: string;
     children: StructureTemplate[];
 }
 
-type StructureTemplate = FileTemplate | DirectoryTemplate;
+export type StructureTemplate = FileTemplate | DirectoryTemplate;
 
-interface LaunchConfig {
+export interface LaunchConfig {
     path: string;
     packagePath: string;
     ipcServer?: string;
     terminalId?: string;
 }
 
-interface TemplateParams {
+export interface TemplateParams {
     path: string;
 }
 
-function isFileTemplate(
+export function isFileTemplate(
     fileOrDirTemplate: StructureTemplate
 ): fileOrDirTemplate is FileTemplate {
     return (fileOrDirTemplate as any).content;
