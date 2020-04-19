@@ -10,6 +10,7 @@ Generating some code and structure:
 *   JavaScript and TypeScript **native templates** (ESNext and working with imports)
 *   **Configurable** throught `.genryrc` config
 *   **Shared templates** by NPM (`node_modules`)
+*   **Formatted code** by [Prettier](https://prettier.io/)
 
 ## Installation & Usage
 
