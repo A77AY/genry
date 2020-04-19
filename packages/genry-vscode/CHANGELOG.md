@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.7](https://github.com/KrickRay/genry/compare/v0.10.6...v0.10.7) (2020-04-19)
+
+
+### Bug Fixes
+
+* add info about prettier ([7f64d09](https://github.com/KrickRay/genry/commit/7f64d09120cd350aa82b4a52066a832095d394ff))
+* upd readme ([30d5669](https://github.com/KrickRay/genry/commit/30d566933d419e670db1ae196a8b86a67c8ba256))
+
+
+
+
+
 ## [0.10.4](https://github.com/KrickRay/genry/compare/v0.10.3...v0.10.4) (2020-04-19)
 
 

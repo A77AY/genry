@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.7](https://github.com/KrickRay/genry/compare/v0.10.6...v0.10.7) (2020-04-19)
+
+
+### Bug Fixes
+
+* add info about prettier ([7f64d09](https://github.com/KrickRay/genry/commit/7f64d09120cd350aa82b4a52066a832095d394ff))
+* export all template types ([765b291](https://github.com/KrickRay/genry/commit/765b291e621161dd51868c607a5d61cfa8df0dcd))
+* select createComponentTemplate ([594a2e2](https://github.com/KrickRay/genry/commit/594a2e2e8f0ebb715e6d088be7d4ff42df25e2b2))
+* upd examples ([5faa98e](https://github.com/KrickRay/genry/commit/5faa98eba9e3a7e9dcfb6594eec19d0b1952877a))
+* upd readme ([30d5669](https://github.com/KrickRay/genry/commit/30d566933d419e670db1ae196a8b86a67c8ba256))
+
+
+
+
+
 ## [0.10.6](https://github.com/KrickRay/genry/compare/v0.10.5...v0.10.6) (2020-04-19)
 
 
