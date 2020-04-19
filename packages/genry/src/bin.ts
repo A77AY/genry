@@ -74,8 +74,9 @@ class Genry {
     }
 
     private async searchTemplates(): Promise<Template[]> {
+        this.spinner.start("Loading templates");
         const files = await promisify(glob)(
-            `${this.config.include || "**"}/*.${TEMPLATE_TYPE}.(ts|js)`,
+            `${this.config.include || "**"}/*.${TEMPLATE_TYPE}.?(ts|js)`,
             {
                 dot: true,
                 nodir: true,
@@ -84,12 +85,15 @@ class Genry {
             }
         );
         if (!files.length) {
+            this.spinner.warn("Templates not found");
+            this.vscodeExtension.emit("notFound");
             return [];
         }
         this.spinner.text =
             files.length === 1
                 ? "Prepare template"
                 : `Prepare ${files.length} templates`;
+        this.vscodeExtension.emit("found");
         return await this.loadTemplates(files);
     }
 
@@ -109,6 +113,7 @@ class Genry {
             []
         );
         process.chdir(startedCwd);
+        this.spinner.succeed("Templates loaded");
         return templates;
     }
 
@@ -131,11 +136,8 @@ class Genry {
     }
 
     async start() {
-        this.spinner.start("Loading templates");
         const templates = await this.searchTemplates();
         if (templates.length) {
-            this.vscodeExtension.emit("found");
-            this.spinner.succeed("Templates loaded");
             const template = await this.selectTemplate(templates);
             if (template) {
                 await template.generate(
@@ -149,8 +151,6 @@ class Genry {
                 );
             }
             this.vscodeExtension.emit("end");
-        } else {
-            this.vscodeExtension.emit("notFound");
         }
     }
 }
