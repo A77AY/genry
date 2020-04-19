@@ -127,7 +127,7 @@ async function selectTemplate(templates: Template[]) {
     clear();
     spinner.start("Loading templates");
 
-    register();
+    register({ compilerOptions: { allowJs: true } });
 
     const args = yargs
         .command("create", "create by template")
