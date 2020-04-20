@@ -80,6 +80,8 @@ class Genry {
             compilerOptions: {
                 allowJs: true,
                 module: "CommonJS",
+                esModuleInterop: true,
+                allowSyntheticDefaultImports: true,
                 ...(config?.registerOptions?.compilerOptions || {}),
             },
         });
