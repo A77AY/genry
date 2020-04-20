@@ -46,7 +46,16 @@ async function getInitConfig() {
             .search(args.path)
             .then((c) => c?.config),
     ]);
-    return { args, packagePath, config: config || {} };
+    return {
+        args: {
+            ...args,
+            path: path.isAbsolute(args.path)
+                ? args.path
+                : path.join(process.cwd(), args.path),
+        },
+        packagePath,
+        config: config || {},
+    };
 }
 
 class Genry {
