@@ -35,7 +35,7 @@ Tempaltes on JavaScript and TypeScript:
     code --install-extension krickray.genry-vscode
     ```
 
--   WebStorm [external tool](https://www.jetbrains.com/help/webstorm/configuring-third-party-tools.html)
+-   WebStorm and others (soon...)
 
 ## Documentation
 
@@ -61,6 +61,13 @@ yarn install
 ```sh
 yarn release
 ```
+
+### Roadmap
+
+- Make optional to use genry package dependency in templates
+- IDEA (WebStorm) extension (or external tool runner)
+- Quick start
+    - Using cache
 
 ### License
 
