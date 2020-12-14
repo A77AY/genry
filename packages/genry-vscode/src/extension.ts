@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
                         cancellable: true,
                     },
                     (progress, token) => {
-                        const result$ = new Promise((res) => {
+                        const result$ = new Promise<void>((res) => {
                             terminalsProgress.set(terminal, {
                                 progress,
                                 progressResolve: () => res(),

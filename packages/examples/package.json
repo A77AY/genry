@@ -9,7 +9,7 @@
         "email": "krickray@gmail.com"
     },
     "scripts": {
-        "start": "genry"
+        "start": "node ../genry/out/bin.js"
     },
     "devDependencies": {
         "@types/lodash": "^4.14.150",
