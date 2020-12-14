@@ -35,7 +35,18 @@ export function isFileTemplate(
     return (fileOrDirTemplate as any).content;
 }
 
-export class Template<T extends string = string, C extends any = any> {
+export interface TemplateObject<
+    T extends string = string,
+    C extends any = any
+> {
+    name: Template<T, C>["name"];
+    description?: Template<T, C>["description"];
+    questions: Prompt<T, T>[];
+    template: Template<T, C>["template"];
+}
+
+export class Template<T extends string = string, C extends any = any>
+    implements TemplateObject<T, C> {
     name: string;
     description?: string;
     questions: PromptObject<T>[];
@@ -50,12 +61,7 @@ export class Template<T extends string = string, C extends any = any> {
         description,
         questions,
         template,
-    }: {
-        name: Template<T, C>["name"];
-        description?: Template<T, C>["description"];
-        questions: Prompt<T, T>[];
-        template: Template<T, C>["template"];
-    }) {
+    }: TemplateObject<T, C>) {
         this.name = name;
         this.description = description;
         this.questions = promptsToPromptsObject(questions);
@@ -63,22 +69,26 @@ export class Template<T extends string = string, C extends any = any> {
     }
 
     async generate(launchConfig: LaunchConfig, config: C) {
-        const answers = await prompts(this.questions);
-        const params: TemplateParams = { path: launchConfig.path };
-        const template = await this.template(answers, config, params);
-        const prettierConfig = await prettier.resolveConfig(
-            launchConfig.packagePath
-        );
+        try {
+            const answers = await prompts(this.questions);
+            const params: TemplateParams = { path: launchConfig.path };
+            const template = await this.template(answers, config, params);
+            const prettierConfig = await prettier.resolveConfig(
+                launchConfig.packagePath
+            );
 
-        await Promise.all(
-            template.map(async (result) =>
-                this.generateStructure({
-                    structureTemplate: result,
-                    rootPath: params.path,
-                    prettierConfig: prettierConfig,
-                })
-            )
-        );
+            await Promise.all(
+                template.map(async (result) =>
+                    this.generateStructure({
+                        structureTemplate: result,
+                        rootPath: params.path,
+                        prettierConfig: prettierConfig,
+                    })
+                )
+            );
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     private async generateStructure({

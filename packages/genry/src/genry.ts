@@ -8,7 +8,7 @@ import * as path from "path";
 
 import { VscodeExtension } from "./vscode-extension";
 import { suggest } from "./suggest";
-import { Template } from "./template";
+import { Template, TemplateObject } from "./template";
 
 const TEMPLATE_TYPE = "genry";
 
@@ -78,11 +78,11 @@ export class Genry {
         const startedCwd = process.cwd();
         process.chdir(this.packagePath);
         const templates = (
-            await Promise.all(
+            await Promise.all<TemplateObject[] | TemplateObject | null>(
                 files.map((file) => {
                     try {
                         return import(path.join(this.packagePath, file)).then(
-                            (f) => f.default as Template | Template[]
+                            (f) => f.default
                         );
                     } catch (e) {
                         console.error(e);
@@ -91,11 +91,10 @@ export class Genry {
                 })
             )
         )
-            .filter((v) => v)
-            .reduce<Template[]>(
-                (acc, t) => acc.concat(Array.isArray(t) ? t : [t]),
-                []
-            );
+            .filter((t) => t)
+            .map((t) => (Array.isArray(t) ? t : [t]))
+            .flat()
+            .map((t) => new Template(t));
         process.chdir(startedCwd);
         this.spinner.succeed("Templates loaded");
         return templates;
